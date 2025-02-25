@@ -1,12 +1,18 @@
 
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Button } from "@/components/ui/button";
 import { Copy, Download, GitFork, Star, Eye } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
-const sampleCode = `// Next.js API Route with TypeScript
+// Sample data - this would typically come from an API
+const boilerplateData = {
+  "1": {
+    title: "Next.js API Route Boilerplate",
+    description: "A simple API route handler for Next.js applications",
+    code: `// Next.js API Route with TypeScript
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type ResponseData = {
@@ -18,14 +24,37 @@ export default function handler(
   res: NextApiResponse<ResponseData>
 ) {
   res.status(200).json({ message: 'Hello from Next.js!' })
-}`;
+}`,
+    stars: 245,
+    forks: 32,
+    views: 1200,
+    features: [
+      "TypeScript support out of the box",
+      "Proper type definitions for Next.js API handlers",
+      "Basic error handling structure",
+      "Clean and minimal implementation",
+    ]
+  },
+  // Add more boilerplates here...
+};
 
 const CodeViewer = () => {
+  const { id } = useParams();
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
 
+  const boilerplate = id ? boilerplateData[id] : null;
+
+  if (!boilerplate) {
+    return (
+      <div className="container py-8 text-center">
+        <h1 className="text-2xl font-bold">Boilerplate not found</h1>
+      </div>
+    );
+  }
+
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(sampleCode);
+    await navigator.clipboard.writeText(boilerplate.code);
     setCopied(true);
     toast({
       title: "Copied to clipboard",
@@ -40,9 +69,9 @@ const CodeViewer = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">Next.js API Route Boilerplate</h1>
+            <h1 className="text-2xl font-bold">{boilerplate.title}</h1>
             <p className="text-muted-foreground">
-              A simple API route handler for Next.js applications
+              {boilerplate.description}
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -61,15 +90,15 @@ const CodeViewer = () => {
         <div className="flex items-center gap-6 text-sm text-muted-foreground">
           <div className="flex items-center gap-1">
             <Star className="w-4 h-4" />
-            <span>245 stars</span>
+            <span>{boilerplate.stars} stars</span>
           </div>
           <div className="flex items-center gap-1">
             <GitFork className="w-4 h-4" />
-            <span>32 forks</span>
+            <span>{boilerplate.forks} forks</span>
           </div>
           <div className="flex items-center gap-1">
             <Eye className="w-4 h-4" />
-            <span>1.2k views</span>
+            <span>{boilerplate.views} views</span>
           </div>
         </div>
 
@@ -98,7 +127,7 @@ const CodeViewer = () => {
                 background: "transparent",
               }}
             >
-              {sampleCode}
+              {boilerplate.code}
             </SyntaxHighlighter>
           </div>
         </div>
@@ -107,17 +136,13 @@ const CodeViewer = () => {
         <div className="prose prose-sm max-w-none">
           <h2 className="text-xl font-semibold mb-4">Description</h2>
           <p className="text-muted-foreground">
-            This boilerplate provides a starting point for creating API routes in Next.js applications.
-            It includes TypeScript types for request and response handling, making it type-safe and
-            easier to maintain. Use this template when you need to create new API endpoints in your
-            Next.js project.
+            {boilerplate.description}
           </p>
           <h3 className="text-lg font-semibold mt-6 mb-2">Features</h3>
           <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-            <li>TypeScript support out of the box</li>
-            <li>Proper type definitions for Next.js API handlers</li>
-            <li>Basic error handling structure</li>
-            <li>Clean and minimal implementation</li>
+            {boilerplate.features.map((feature, index) => (
+              <li key={index}>{feature}</li>
+            ))}
           </ul>
         </div>
       </div>
