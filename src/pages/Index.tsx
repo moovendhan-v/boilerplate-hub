@@ -1,12 +1,35 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { SearchBar } from "@/components/SearchBar";
+import { Navigation } from "@/components/Navigation";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen">
+      <Navigation />
+      <main className="container pt-24 pb-20">
+        <section className="space-y-6 text-center">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold sm:text-5xl md:text-6xl">
+              Developer Boilerplates
+            </h1>
+            <p className="text-lg text-muted-foreground">
+              Jump-start your next project with our collection of boilerplates
+            </p>
+          </div>
+          <SearchBar />
+          <div className="flex items-center justify-center gap-4">
+            <Button variant="default" size="lg">
+              Browse All
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="lg">
+              Submit Boilerplate
+            </Button>
+          </div>
+        </section>
+      </main>
     </div>
   );
 };
