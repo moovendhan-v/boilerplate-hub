@@ -35,7 +35,164 @@ export default function handler(
       "Clean and minimal implementation",
     ]
   },
-  // Add more boilerplates here...
+  "2": {
+    title: "React + Vite Starter",
+    description: "Modern React application starter with Vite, TypeScript, and TailwindCSS pre-configured.",
+    code: `// vite.config.ts
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
+  }
+})`,
+    stars: 189,
+    forks: 24,
+    views: 800,
+    features: [
+      "Vite for fast development",
+      "TypeScript configuration",
+      "TailwindCSS setup",
+      "Path aliases configured",
+    ]
+  },
+  "3": {
+    title: "Express.js REST API",
+    description: "Production-ready Express.js REST API boilerplate with authentication, validation, and database integration.",
+    code: `// app.ts
+import express from 'express'
+import cors from 'cors'
+import morgan from 'morgan'
+import { router } from './routes'
+
+const app = express()
+
+app.use(cors())
+app.use(morgan('dev'))
+app.use(express.json())
+app.use('/api', router)
+
+export default app`,
+    stars: 567,
+    forks: 89,
+    views: 2300,
+    features: [
+      "Express.js with TypeScript",
+      "CORS and logging middleware",
+      "Modular routing structure",
+      "Error handling middleware",
+    ]
+  },
+  "4": {
+    title: "FastAPI Backend Template",
+    description: "Modern Python backend with FastAPI, SQLAlchemy, and Pydantic for type-safe API development.",
+    code: `# main.py
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.routes import router
+
+app = FastAPI(title="FastAPI Template")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(router, prefix="/api")`,
+    stars: 423,
+    forks: 67,
+    views: 1500,
+    features: [
+      "FastAPI with Python 3.9+",
+      "SQLAlchemy ORM integration",
+      "Pydantic models for validation",
+      "Automatic OpenAPI docs",
+    ]
+  },
+  "5": {
+    title: "Docker Compose Setup",
+    description: "Complete development environment with Docker Compose, including Nginx, PostgreSQL, and Redis.",
+    code: `# docker-compose.yml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=postgres
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:14-alpine
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=myapp
+
+  redis:
+    image: redis:alpine`,
+    stars: 312,
+    forks: 45,
+    views: 900,
+    features: [
+      "Multi-container setup",
+      "PostgreSQL database",
+      "Redis caching",
+      "Nginx reverse proxy",
+    ]
+  },
+  "6": {
+    title: "GraphQL + Prisma Starter",
+    description: "Full-stack GraphQL application starter with Prisma ORM, NextAuth, and automatic type generation.",
+    code: `// schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  posts     Post[]
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default(now())
+}`,
+    stars: 289,
+    forks: 34,
+    views: 1100,
+    features: [
+      "GraphQL API setup",
+      "Prisma ORM configuration",
+      "NextAuth.js integration",
+      "Type-safe resolvers",
+    ]
+  }
 };
 
 const CodeViewer = () => {
