@@ -1,13 +1,11 @@
 
 import { SearchBar } from "@/components/SearchBar";
-import { Navigation } from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
-      <Navigation />
       <main className="container pt-24 pb-20">
         <section className="space-y-6 text-center">
           <div className="space-y-2">
