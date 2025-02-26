@@ -1,70 +1,19 @@
-
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Button } from "@/components/ui/button";
-import { Copy, Download, GitFork, Star, Eye } from "lucide-react";
+import { Copy, Download, GitFork, Star, Eye, FileCode } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-// Sample data - this would typically come from an API
 const boilerplateData = {
-  "1": {
-    title: "Next.js API Route Boilerplate",
-    description: "A simple API route handler for Next.js applications",
-    code: `// Next.js API Route with TypeScript
-import type { NextApiRequest, NextApiResponse } from 'next'
-
-type ResponseData = {
-  message: string
-}
-
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
-) {
-  res.status(200).json({ message: 'Hello from Next.js!' })
-}`,
-    stars: 245,
-    forks: 32,
-    views: 1200,
-    features: [
-      "TypeScript support out of the box",
-      "Proper type definitions for Next.js API handlers",
-      "Basic error handling structure",
-      "Clean and minimal implementation",
-    ]
-  },
-  "2": {
-    title: "React + Vite Starter",
-    description: "Modern React application starter with Vite, TypeScript, and TailwindCSS pre-configured.",
-    code: `// vite.config.ts
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import path from 'path'
-
-export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  }
-})`,
-    stars: 189,
-    forks: 24,
-    views: 800,
-    features: [
-      "Vite for fast development",
-      "TypeScript configuration",
-      "TailwindCSS setup",
-      "Path aliases configured",
-    ]
-  },
   "3": {
     title: "Express.js REST API",
     description: "Production-ready Express.js REST API boilerplate with authentication, validation, and database integration.",
-    code: `// app.ts
+    files: {
+      "app.ts": {
+        content: `// app.ts
 import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
@@ -78,6 +27,75 @@ app.use(express.json())
 app.use('/api', router)
 
 export default app`,
+        language: "typescript"
+      },
+      "routes/index.ts": {
+        content: `// routes/index.ts
+import { Router } from 'express'
+import { auth } from '../middleware/auth'
+import { userRouter } from './user'
+import { postRouter } from './post'
+
+export const router = Router()
+
+router.use('/users', auth, userRouter)
+router.use('/posts', auth, postRouter)`,
+        language: "typescript"
+      },
+      "middleware/auth.ts": {
+        content: `// middleware/auth.ts
+import { Request, Response, NextFunction } from 'express'
+import jwt from 'jsonwebtoken'
+
+export const auth = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers.authorization?.split(' ')[1]
+  
+  if (!token) {
+    return res.status(401).json({ message: 'No token provided' })
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!)
+    req.user = decoded
+    next()
+  } catch (err) {
+    res.status(401).json({ message: 'Invalid token' })
+  }
+}`,
+        language: "typescript"
+      },
+      "README.md": {
+        content: `# Express.js REST API Boilerplate
+
+A production-ready Express.js REST API boilerplate with authentication, validation, and database integration.
+
+## Features
+
+- TypeScript support
+- JWT Authentication
+- Request validation
+- Database integration
+- API documentation
+- Error handling
+- Logging middleware
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies: \`npm install\`
+3. Configure environment variables
+4. Start development server: \`npm run dev\`
+
+## Contributing
+
+1. Fork the repository
+2. Clone your fork
+3. Create a new branch
+4. Make your changes
+5. Submit a pull request`,
+        language: "markdown"
+      }
+    },
     stars: 567,
     forks: 89,
     views: 2300,
@@ -86,112 +104,23 @@ export default app`,
       "CORS and logging middleware",
       "Modular routing structure",
       "Error handling middleware",
-    ]
-  },
-  "4": {
-    title: "FastAPI Backend Template",
-    description: "Modern Python backend with FastAPI, SQLAlchemy, and Pydantic for type-safe API development.",
-    code: `# main.py
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from app.routes import router
-
-app = FastAPI(title="FastAPI Template")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-app.include_router(router, prefix="/api")`,
-    stars: 423,
-    forks: 67,
-    views: 1500,
-    features: [
-      "FastAPI with Python 3.9+",
-      "SQLAlchemy ORM integration",
-      "Pydantic models for validation",
-      "Automatic OpenAPI docs",
-    ]
-  },
-  "5": {
-    title: "Docker Compose Setup",
-    description: "Complete development environment with Docker Compose, including Nginx, PostgreSQL, and Redis.",
-    code: `# docker-compose.yml
-version: '3.8'
-
-services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=development
-      - DB_HOST=postgres
-    depends_on:
-      - postgres
-      - redis
-
-  postgres:
-    image: postgres:14-alpine
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=myapp
-
-  redis:
-    image: redis:alpine`,
-    stars: 312,
-    forks: 45,
-    views: 900,
-    features: [
-      "Multi-container setup",
-      "PostgreSQL database",
-      "Redis caching",
-      "Nginx reverse proxy",
-    ]
-  },
-  "6": {
-    title: "GraphQL + Prisma Starter",
-    description: "Full-stack GraphQL application starter with Prisma ORM, NextAuth, and automatic type generation.",
-    code: `// schema.prisma
-generator client {
-  provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  posts     Post[]
-  createdAt DateTime @default(now())
-}
-
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  createdAt DateTime @default(now())
-}`,
-    stars: 289,
-    forks: 34,
-    views: 1100,
-    features: [
-      "GraphQL API setup",
-      "Prisma ORM configuration",
-      "NextAuth.js integration",
-      "Type-safe resolvers",
-    ]
+    ],
+    contributing: {
+      guidelines: "Please read our contributing guidelines before submitting a PR.",
+      setupSteps: [
+        "Fork the repository",
+        "Clone your fork",
+        "Create a new branch",
+        "Make your changes",
+        "Submit a pull request"
+      ],
+      requirements: [
+        "All code must be in TypeScript",
+        "Include tests for new features",
+        "Follow the existing code style",
+        "Update documentation as needed"
+      ]
+    }
   }
 };
 
@@ -199,6 +128,7 @@ const CodeViewer = () => {
   const { id } = useParams();
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
+  const [activeFile, setActiveFile] = useState<string | null>(null);
 
   const boilerplate = id ? boilerplateData[id] : null;
 
@@ -210,8 +140,11 @@ const CodeViewer = () => {
     );
   }
 
+  const files = Object.keys(boilerplate.files);
+  const currentFile = activeFile || files[0];
+
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(boilerplate.code);
+    await navigator.clipboard.writeText(boilerplate.files[currentFile].content);
     setCopied(true);
     toast({
       title: "Copied to clipboard",
@@ -259,10 +192,24 @@ const CodeViewer = () => {
           </div>
         </div>
 
-        {/* Code Editor */}
+        {/* File Browser and Code Editor */}
         <div className="relative rounded-lg overflow-hidden border">
           <div className="flex items-center justify-between px-4 py-2 bg-muted border-b">
-            <span className="text-sm font-medium">pages/api/hello.ts</span>
+            <TabsList className="w-full justify-start h-auto gap-2 bg-transparent">
+              {files.map((file) => (
+                <TabsTrigger
+                  key={file}
+                  value={file}
+                  onClick={() => setActiveFile(file)}
+                  className={`flex items-center gap-2 px-3 py-1.5 text-sm ${
+                    currentFile === file ? "bg-background" : ""
+                  }`}
+                >
+                  <FileCode className="w-4 h-4" />
+                  {file}
+                </TabsTrigger>
+              ))}
+            </TabsList>
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm" onClick={handleCopy}>
                 <Copy className="w-4 h-4 mr-2" />
@@ -276,7 +223,7 @@ const CodeViewer = () => {
           </div>
           <div className="p-4 bg-muted/50">
             <SyntaxHighlighter
-              language="typescript"
+              language={boilerplate.files[currentFile].language}
               style={atomDark}
               customStyle={{
                 margin: 0,
@@ -284,18 +231,34 @@ const CodeViewer = () => {
                 background: "transparent",
               }}
             >
-              {boilerplate.code}
+              {boilerplate.files[currentFile].content}
             </SyntaxHighlighter>
           </div>
         </div>
 
-        {/* Description */}
+        {/* Contributing Section */}
         <div className="prose prose-sm max-w-none">
-          <h2 className="text-xl font-semibold mb-4">Description</h2>
-          <p className="text-muted-foreground">
-            {boilerplate.description}
+          <h2 className="text-xl font-semibold mb-4">How to Contribute</h2>
+          <p className="text-muted-foreground mb-4">
+            {boilerplate.contributing.guidelines}
           </p>
-          <h3 className="text-lg font-semibold mt-6 mb-2">Features</h3>
+          <h3 className="text-lg font-semibold mt-6 mb-2">Setup Steps</h3>
+          <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
+            {boilerplate.contributing.setupSteps.map((step, index) => (
+              <li key={index}>{step}</li>
+            ))}
+          </ol>
+          <h3 className="text-lg font-semibold mt-6 mb-2">Requirements</h3>
+          <ul className="list-disc list-inside space-y-1 text-muted-foreground">
+            {boilerplate.contributing.requirements.map((req, index) => (
+              <li key={index}>{req}</li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Features */}
+        <div className="prose prose-sm max-w-none">
+          <h2 className="text-xl font-semibold mb-4">Features</h2>
           <ul className="list-disc list-inside space-y-1 text-muted-foreground">
             {boilerplate.features.map((feature, index) => (
               <li key={index}>{feature}</li>
