@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -355,46 +356,52 @@ const CodeViewer = () => {
 
         {/* File Browser and Code Editor */}
         <div className="relative rounded-lg overflow-hidden border">
-          <div className="flex items-center justify-between px-4 py-2 bg-muted border-b">
-            <TabsList className="w-full justify-start h-auto gap-2 bg-transparent">
-              {files.map((file) => (
-                <TabsTrigger
-                  key={file}
-                  value={file}
-                  onClick={() => setActiveFile(file)}
-                  className={`flex items-center gap-2 px-3 py-1.5 text-sm ${
-                    currentFile === file ? "bg-background" : ""
-                  }`}
-                >
-                  <FileCode className="w-4 h-4" />
-                  {file}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" onClick={handleCopy}>
-                <Copy className="w-4 h-4 mr-2" />
-                {copied ? "Copied!" : "Copy"}
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Download className="w-4 h-4 mr-2" />
-                Download
-              </Button>
+          <Tabs defaultValue={files[0]} onValueChange={setActiveFile}>
+            <div className="flex items-center justify-between px-4 py-2 bg-muted border-b">
+              <TabsList className="w-full justify-start h-auto gap-2 bg-transparent">
+                {files.map((file) => (
+                  <TabsTrigger
+                    key={file}
+                    value={file}
+                    className={`flex items-center gap-2 px-3 py-1.5 text-sm ${
+                      currentFile === file ? "bg-background" : ""
+                    }`}
+                  >
+                    <FileCode className="w-4 h-4" />
+                    {file}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="sm" onClick={handleCopy}>
+                  <Copy className="w-4 h-4 mr-2" />
+                  {copied ? "Copied!" : "Copy"}
+                </Button>
+                <Button variant="ghost" size="sm">
+                  <Download className="w-4 h-4 mr-2" />
+                  Download
+                </Button>
+              </div>
             </div>
-          </div>
-          <div className="p-4 bg-muted/50">
-            <SyntaxHighlighter
-              language={boilerplate.files[currentFile].language}
-              style={atomDark}
-              customStyle={{
-                margin: 0,
-                padding: "1rem",
-                background: "transparent",
-              }}
-            >
-              {boilerplate.files[currentFile].content}
-            </SyntaxHighlighter>
-          </div>
+            
+            {files.map((file) => (
+              <TabsContent key={file} value={file} className="mt-0">
+                <div className="p-4 bg-muted/50">
+                  <SyntaxHighlighter
+                    language={boilerplate.files[file].language}
+                    style={atomDark}
+                    customStyle={{
+                      margin: 0,
+                      padding: "1rem",
+                      background: "transparent",
+                    }}
+                  >
+                    {boilerplate.files[file].content}
+                  </SyntaxHighlighter>
+                </div>
+              </TabsContent>
+            ))}
+          </Tabs>
         </div>
 
         {/* Contributing Section */}
