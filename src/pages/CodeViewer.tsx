@@ -121,6 +121,167 @@ A production-ready Express.js REST API boilerplate with authentication, validati
         "Update documentation as needed"
       ]
     }
+  },
+  "4": {
+    title: "FastAPI Backend Template",
+    description: "Modern Python backend with FastAPI, SQLAlchemy, and Pydantic for type-safe API development.",
+    files: {
+      "main.py": {
+        content: `from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.routes import router
+from app.core.config import settings
+
+app = FastAPI(title=settings.PROJECT_NAME)
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(router, prefix="/api")`,
+        language: "python"
+      },
+      "app/models/user.py": {
+        content: `from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.sql import func
+from app.db.base_class import Base
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+    full_name = Column(String)
+    created_at = Column(DateTime, server_default=func.now())
+    updated_at = Column(DateTime, onupdate=func.now())`,
+        language: "python"
+      },
+      "app/schemas/user.py": {
+        content: `from pydantic import BaseModel, EmailStr
+from datetime import datetime
+from typing import Optional
+
+class UserBase(BaseModel):
+    email: EmailStr
+    full_name: Optional[str] = None
+
+class UserCreate(UserBase):
+    password: str
+
+class User(UserBase):
+    id: int
+    created_at: datetime
+    updated_at: Optional[datetime]
+
+    class Config:
+        from_attributes = True`,
+        language: "python"
+      },
+      "app/core/config.py": {
+        content: `from pydantic_settings import BaseSettings
+from typing import List
+
+class Settings(BaseSettings):
+    PROJECT_NAME: str = "FastAPI Template"
+    VERSION: str = "1.0.0"
+    API_V1_STR: str = "/api/v1"
+    
+    POSTGRES_SERVER: str
+    POSTGRES_USER: str
+    POSTGRES_PASSWORD: str
+    POSTGRES_DB: str
+    
+    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000"]
+    
+    class Config:
+        case_sensitive = True
+        env_file = ".env"
+
+settings = Settings()`,
+        language: "python"
+      },
+      "README.md": {
+        content: `# FastAPI Backend Template
+
+A modern Python backend template using FastAPI, SQLAlchemy, and Pydantic.
+
+## Features
+
+- FastAPI with Python 3.9+
+- PostgreSQL database with SQLAlchemy ORM
+- Pydantic models for request/response validation
+- Automatic OpenAPI documentation
+- Docker support
+- Alembic migrations
+- JWT authentication
+
+## Getting Started
+
+1. Clone the repository
+2. Create a virtual environment: \`python -m venv venv\`
+3. Activate the virtual environment:
+   - Windows: \`venv\\Scripts\\activate\`
+   - Unix: \`source venv/bin/activate\`
+4. Install dependencies: \`pip install -r requirements.txt\`
+5. Copy \`.env.example\` to \`.env\` and configure
+6. Run migrations: \`alembic upgrade head\`
+7. Start server: \`uvicorn main:app --reload\`
+
+## Project Structure
+
+\`\`\`
+├── app/
+│   ├── core/         # Configuration
+│   ├── models/       # SQLAlchemy models
+│   ├── schemas/      # Pydantic models
+│   ├── api/          # API endpoints
+│   ├── crud/         # Database operations
+│   └── utils/        # Utilities
+├── alembic/          # Database migrations
+├── tests/            # Test suite
+└── main.py          # Application entry point
+\`\`\``,
+        language: "markdown"
+      }
+    },
+    stars: 423,
+    forks: 67,
+    views: 1500,
+    features: [
+      "FastAPI with Python 3.9+",
+      "SQLAlchemy ORM integration",
+      "Pydantic models for validation",
+      "Automatic OpenAPI docs",
+      "Docker support",
+      "JWT authentication",
+      "Database migrations"
+    ],
+    contributing: {
+      guidelines: "We welcome contributions! Please follow our contribution guidelines to ensure your PR can be accepted.",
+      setupSteps: [
+        "Fork the repository",
+        "Clone your fork",
+        "Create a virtual environment",
+        "Install dependencies",
+        "Create a new branch",
+        "Make your changes",
+        "Run tests",
+        "Submit a pull request"
+      ],
+      requirements: [
+        "All code must follow PEP 8 style guide",
+        "Add tests for new features",
+        "Update documentation as needed",
+        "Ensure all tests pass",
+        "Type hints are required for all functions"
+      ]
+    }
   }
 };
 
