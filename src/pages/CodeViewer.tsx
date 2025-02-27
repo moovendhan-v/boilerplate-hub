@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Copy, Download, GitFork, Star, Eye, FileCode } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const boilerplateData = {
   "3": {
@@ -1105,21 +1106,25 @@ const CodeViewer = () => {
         <div className="relative rounded-lg overflow-hidden border">
           <Tabs defaultValue={files[0]} onValueChange={setActiveFile}>
             <div className="flex items-center justify-between px-4 py-2 bg-muted border-b">
-              <TabsList className="w-full justify-start h-auto gap-2 bg-transparent">
-                {files.map((file) => (
-                  <TabsTrigger
-                    key={file}
-                    value={file}
-                    className={`flex items-center gap-2 px-3 py-1.5 text-sm ${
-                      currentFile === file ? "bg-background" : ""
-                    }`}
-                  >
-                    <FileCode className="w-4 h-4" />
-                    {file}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-              <div className="flex items-center gap-2">
+              <div className="flex-grow overflow-hidden mr-2">
+                <ScrollArea className="w-full" orientation="horizontal">
+                  <TabsList className="inline-flex w-max justify-start h-auto gap-2 bg-transparent px-1 py-1">
+                    {files.map((file) => (
+                      <TabsTrigger
+                        key={file}
+                        value={file}
+                        className={`flex items-center gap-2 px-3 py-1.5 text-sm whitespace-nowrap ${
+                          currentFile === file ? "bg-background" : ""
+                        }`}
+                      >
+                        <FileCode className="w-4 h-4 flex-shrink-0" />
+                        {file}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </ScrollArea>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
                 <Button variant="ghost" size="sm" onClick={handleCopy}>
                   <Copy className="w-4 h-4 mr-2" />
                   {copied ? "Copied!" : "Copy"}
