@@ -1107,21 +1107,23 @@ const CodeViewer = () => {
           <Tabs defaultValue={files[0]} onValueChange={setActiveFile}>
             <div className="flex items-center justify-between px-4 py-2 bg-muted border-b">
               <div className="flex-grow overflow-hidden mr-2">
-                <ScrollArea className="w-full" orientation="horizontal">
-                  <TabsList className="inline-flex w-max justify-start h-auto gap-2 bg-transparent px-1 py-1">
-                    {files.map((file) => (
-                      <TabsTrigger
-                        key={file}
-                        value={file}
-                        className={`flex items-center gap-2 px-3 py-1.5 text-sm whitespace-nowrap ${
-                          currentFile === file ? "bg-background" : ""
-                        }`}
-                      >
-                        <FileCode className="w-4 h-4 flex-shrink-0" />
-                        {file}
-                      </TabsTrigger>
-                    ))}
-                  </TabsList>
+                <ScrollArea className="w-full">
+                  <div className="inline-flex w-max pb-3">
+                    <TabsList className="inline-flex w-max justify-start h-auto gap-2 bg-transparent px-1 py-1">
+                      {files.map((file) => (
+                        <TabsTrigger
+                          key={file}
+                          value={file}
+                          className={`flex items-center gap-2 px-3 py-1.5 text-sm whitespace-nowrap ${
+                            currentFile === file ? "bg-background" : ""
+                          }`}
+                        >
+                          <FileCode className="w-4 h-4 flex-shrink-0" />
+                          {file}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </div>
                 </ScrollArea>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
