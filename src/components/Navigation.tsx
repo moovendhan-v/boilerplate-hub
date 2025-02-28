@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 const navigationItems = [
   { name: "Home", path: "/", icon: Home },
   { name: "Explore", path: "/explore", icon: Search },
-  { name: "Code", path: "/code", icon: Code },
+  { name: "Code", path: "/code/1", icon: Code },
   { name: "Community", path: "/community", icon: Users },
   { name: "Dashboard", path: "/dashboard", icon: Layout },
 ];
@@ -19,12 +19,16 @@ export const Navigation = () => {
         <div className="flex items-center space-x-8">
           {navigationItems.map((item) => {
             const Icon = item.icon;
+            const isActive = 
+              location.pathname === item.path || 
+              (item.path !== "/" && location.pathname.startsWith(item.path));
+            
             return (
               <Link
                 key={item.path}
                 to={item.path}
                 className={`flex items-center space-x-2 text-sm font-medium transition-colors hover:text-primary ${
-                  location.pathname === item.path
+                  isActive
                     ? "text-primary"
                     : "text-muted-foreground"
                 }`}
