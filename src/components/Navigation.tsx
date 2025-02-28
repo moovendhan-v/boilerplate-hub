@@ -1,6 +1,7 @@
 
 import { Home, Search, Code, Users, Layout } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const navigationItems = [
   { name: "Home", path: "/", icon: Home },
@@ -11,7 +12,7 @@ const navigationItems = [
 ];
 
 export const Navigation = () => {
-  const location = useLocation();
+  const router = useRouter();
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-t md:top-0 md:bottom-auto">
@@ -20,13 +21,13 @@ export const Navigation = () => {
           {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = 
-              location.pathname === item.path || 
-              (item.path !== "/" && location.pathname.startsWith(item.path));
+              router.pathname === item.path || 
+              (item.path !== "/" && router.pathname.startsWith(item.path));
             
             return (
               <Link
                 key={item.path}
-                to={item.path}
+                href={item.path}
                 className={`flex items-center space-x-2 text-sm font-medium transition-colors hover:text-primary ${
                   isActive
                     ? "text-primary"
