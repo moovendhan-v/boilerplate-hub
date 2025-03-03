@@ -131,7 +131,7 @@ const CodeViewer = () => {
               </div>
             </CardContent>
           )}
-        </CardContent>
+        </Card>
       )}
     </div>
   );
