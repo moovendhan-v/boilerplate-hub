@@ -30,7 +30,7 @@ git clone <YOUR_GIT_URL>
 cd <YOUR_PROJECT_NAME>
 
 # Step 3: Install the necessary dependencies.
-npm i
+npm install
 
 # Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
@@ -52,18 +52,43 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with modern web technologies:
 
-- Vite
+- Next.js (App Router)
 - TypeScript
-- React
+- MongoDB (Database)
+- Prisma (ORM)
 - shadcn-ui
 - Tailwind CSS
 
+## Database Setup
+
+This project uses MongoDB as the database and Prisma as the ORM. Make sure you have MongoDB installed and running locally, or use MongoDB Atlas for cloud hosting.
+
+To set up the database:
+
+1. Create a `.env` file in the root directory
+2. Add your MongoDB connection string:
+   ```
+   DATABASE_URL="your_mongodb_connection_string"
+   ```
+3. Run Prisma migrations:
+   ```sh
+   npx prisma generate
+   npx prisma db push
+   ```
+
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/4779b9d2-1b09-4d43-bd0b-1cb06cc88abd) and click on Share -> Publish.
+This Next.js application can be deployed in several ways:
+
+1. **Via Lovable**: Simply open [Lovable](https://lovable.dev/projects/4779b9d2-1b09-4d43-bd0b-1cb06cc88abd) and click on Share -> Publish.
+
+2. **Using Vercel**: As Next.js is created by Vercel, deploying to their platform is seamless:
+   - Connect your GitHub repository to Vercel
+   - Vercel will automatically detect Next.js and configure the build settings
+   - Your app will be deployed with every push to the main branch
 
 ## I want to use a custom domain - is that possible?
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+We don't support custom domains through Lovable (yet). If you want to deploy your project under your own domain, we recommend using Vercel or Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
