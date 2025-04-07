@@ -1,0 +1,46 @@
+type File {
+  name: String!
+  path: String!
+  content: String!
+  type: String!
+}
+
+type Boilerplate {
+  id: ID!
+  name: String!
+  description: String!
+  tags: [String!]!
+  framework: String!
+  language: String!
+  stars: Int!
+  downloads: Int!
+  createdAt: String!
+  updatedAt: String!
+  author: User!
+  files: [File!]!
+}
+
+extend type Query {
+  boilerplates: [Boilerplate!]!
+  boilerplate(id: ID!): Boilerplate
+}
+
+extend type Mutation {
+  createBoilerplate(
+    name: String!
+    description: String!
+    tags: [String!]!
+    framework: String!
+    language: String!
+    authorId: ID!
+  ): Boilerplate!
+  updateBoilerplate(
+    id: ID!
+    name: String
+    description: String
+    tags: [String!]
+    framework: String
+    language: String
+  ): Boilerplate!
+  deleteBoilerplate(id: ID!): Boolean!
+}

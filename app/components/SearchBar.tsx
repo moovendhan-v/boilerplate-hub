@@ -1,7 +1,7 @@
 'use client'
 
 import { Search } from "lucide-react";
-import { useBoilerplateStore } from "@/store/store";
+import { useBoilerplateStore } from '@/store/boilerplate-store';
 import { Input } from "@/components/ui/input";
 
 export const SearchBar = () => {

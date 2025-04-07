@@ -1,16 +1,20 @@
-import { Metadata } from 'next';
+'use client';
+
 import Link from 'next/link';
 import { SearchBar } from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { BoilerplateCard } from "@/components/BoilerplateCard";
-
-export const metadata: Metadata = {
-  title: 'Boilerplate Hub - Home',
-  description: 'Discover and share boilerplate code for your next project',
-};
+import { useBoilerplateStore } from '@/store/boilerplate-store';
+import { useEffect } from 'react';
 
 export default function HomePage() {
+  const { boilerplates, loading, error, fetchBoilerplates } = useBoilerplateStore();
+
+  useEffect(() => {
+    fetchBoilerplates();
+  }, [fetchBoilerplates]);
+
   return (
     <div className="min-h-screen pb-20">
       <main className="container pt-24">
@@ -35,44 +39,29 @@ export default function HomePage() {
         </section>
         
         <section className="mt-16">
-          <h2 className="text-2xl font-bold mb-6">Featured Boilerplates</h2>
+          <h2 className="text-2xl font-bold mb-6">Featured Boilerplatess</h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <BoilerplateCard
-              id="1"
-              title="Next.js API Route Boilerplate"
-              description="A simple API route handler for Next.js applications with TypeScript support and proper error handling."
-              language="TypeScript"
-              stars={245}
-              forks={32}
-              author={{
-                name: "John Doe",
-                avatar: "https://github.com/github.png"
-              }}
-            />
-            <BoilerplateCard
-              id="2"
-              title="React + Vite Starter"
-              description="Modern React application starter with Vite, TypeScript, and TailwindCSS pre-configured."
-              language="TypeScript"
-              stars={189}
-              forks={24}
-              author={{
-                name: "Jane Smith",
-                avatar: "https://github.com/github.png"
-              }}
-            />
-            <BoilerplateCard
-              id="3"
-              title="Express.js REST API"
-              description="Production-ready Express.js REST API boilerplate with authentication, validation, and database integration."
-              language="JavaScript"
-              stars={567}
-              forks={89}
-              author={{
-                name: "Mike Johnson",
-                avatar: "https://github.com/github.png"
-              }}
-            />
+            {loading ? (
+              <div>Loading boilerplates...</div>
+            ) : error ? (
+              <div>Error page: {error}</div>
+            ) : (
+              boilerplates.slice(0, 3).map((boilerplate) => (
+                <BoilerplateCard
+                  key={boilerplate.id}
+                  id={boilerplate.id}
+                  name={boilerplate.name}
+                  description={boilerplate.description}
+                  language={boilerplate.language}
+                  stars={boilerplate.stars}
+                  forks={0}
+                  author={{
+                    name: boilerplate?.author?.name,
+                    avatar: boilerplate?.author?.avatar
+                  }}
+                />
+              ))
+            )}
           </div>
         </section>
       </main>

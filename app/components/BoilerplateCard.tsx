@@ -1,11 +1,14 @@
 import { FileCode, Star, GitFork } from "lucide-react";
 import Link from "next/link";
 
+import { useBoilerplateStore } from '@/store/boilerplate-store';
+
 interface BoilerplateCardProps {
   id: string;
-  title: string;
+  name: string;
   description: string;
   language: string;
+  framework?: string;
   stars: number;
   forks: number;
   author: {
@@ -16,9 +19,10 @@ interface BoilerplateCardProps {
 
 export const BoilerplateCard = ({
   id,
-  title,
+  name,
   description,
   language,
+  framework,
   stars,
   forks,
   author,
@@ -31,12 +35,17 @@ export const BoilerplateCard = ({
             <FileCode className="h-8 w-8 text-muted-foreground" />
           </div>
           <div className="flex-1 space-y-2">
-            <h3 className="font-semibold leading-none tracking-tight">{title}</h3>
+            <h3 className="font-semibold leading-none tracking-tight">{name}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2">{description}</p>
             <div className="flex items-center gap-4 pt-2">
               <span className="text-xs bg-secondary px-2 py-1 rounded">
                 {language}
               </span>
+              {framework && (
+                <span className="text-xs bg-secondary px-2 py-1 rounded">
+                  {framework}
+                </span>
+              )}
               <div className="flex items-center gap-4 text-xs text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Star className="h-3 w-3" />

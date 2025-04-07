@@ -82,9 +82,7 @@ To set up the database:
 
 This Next.js application can be deployed in several ways:
 
-1. **Via Lovable**: Simply open [Lovable](https://lovable.dev/projects/4779b9d2-1b09-4d43-bd0b-1cb06cc88abd) and click on Share -> Publish.
-
-2. **Using Vercel**: As Next.js is created by Vercel, deploying to their platform is seamless:
+1. **Using Vercel**: As Next.js is created by Vercel, deploying to their platform is seamless:
    - Connect your GitHub repository to Vercel
    - Vercel will automatically detect Next.js and configure the build settings
    - Your app will be deployed with every push to the main branch
@@ -92,3 +90,6 @@ This Next.js application can be deployed in several ways:
 ## I want to use a custom domain - is that possible?
 
 We don't support custom domains through Lovable (yet). If you want to deploy your project under your own domain, we recommend using Vercel or Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+
+alias mdb='docker run --rm -d -p 27017:27017 -h $(hostname) --name mongo mongo:6.0.5 --replSet=RS && sleep 5 && docker exec mongo mongosh --quiet --eval "rs.initiate();"'
+alias m='docker exec -it mongo mongosh --quiet'

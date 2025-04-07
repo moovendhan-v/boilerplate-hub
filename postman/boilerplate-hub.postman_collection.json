@@ -1,0 +1,172 @@
+{
+  "info": {
+    "name": "Boilerplate Hub API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Queries",
+      "item": [
+        {
+          "name": "Get All Boilerplates",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query {\n    boilerplates {\n      id\n      name\n      description\n      tags\n      framework\n      language\n      stars\n      downloads\n      createdAt\n      updatedAt\n      author {\n        id\n        name\n        email\n      }\n    }\n  }\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "graphql"]
+            }
+          }
+        },
+        {
+          "name": "Get Boilerplate by ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query($id: ID!) {\n    boilerplate(id: $id) {\n      id\n      name\n      description\n      tags\n      framework\n      language\n      stars\n      downloads\n      createdAt\n      updatedAt\n      author {\n        id\n        name\n        email\n      }\n    }\n  }\",\n  \"variables\": {\n    \"id\": \"your-boilerplate-id\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "graphql"]
+            }
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query {\n    users {\n      id\n      email\n      name\n      createdAt\n      updatedAt\n      boilerplates {\n        id\n        name\n      }\n    }\n  }\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "graphql"]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query($id: ID!) {\n    user(id: $id) {\n      id\n      email\n      name\n      createdAt\n      updatedAt\n      boilerplates {\n        id\n        name\n      }\n    }\n  }\",\n  \"variables\": {\n    \"id\": \"your-user-id\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "graphql"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Mutations",
+      "item": [
+        {
+          "name": "Create Boilerplate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation($input: CreateBoilerplateInput!) {\n    createBoilerplate(\n      name: $input.name\n      description: $input.description\n      tags: $input.tags\n      framework: $input.framework\n      language: $input.language\n      authorId: $input.authorId\n    ) {\n      id\n      name\n      description\n      tags\n      framework\n      language\n      stars\n      downloads\n      createdAt\n      updatedAt\n      author {\n        id\n        name\n      }\n    }\n  }\",\n  \"variables\": {\n    \"input\": {\n      \"name\": \"Example Boilerplate\",\n      \"description\": \"A sample boilerplate\",\n      \"tags\": [\"react\", \"typescript\"],\n      \"framework\": \"React\",\n      \"language\": \"TypeScript\",\n      \"authorId\": \"your-user-id\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "graphql"]
+            }
+          }
+        },
+        {
+          "name": "Update Boilerplate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation($input: UpdateBoilerplateInput!) {\n    updateBoilerplate(\n      id: $input.id\n      name: $input.name\n      description: $input.description\n      tags: $input.tags\n      framework: $input.framework\n      language: $input.language\n    ) {\n      id\n      name\n      description\n      tags\n      framework\n      language\n      stars\n      downloads\n      updatedAt\n    }\n  }\",\n  \"variables\": {\n    \"input\": {\n      \"id\": \"your-boilerplate-id\",\n      \"name\": \"Updated Boilerplate\",\n      \"description\": \"An updated description\",\n      \"tags\": [\"updated\", \"tags\"],\n      \"framework\": \"Updated Framework\",\n      \"language\": \"Updated Language\"\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "graphql"]
+            }
+          }
+        },
+        {
+          "name": "Delete Boilerplate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation($id: ID!) {\n    deleteBoilerplate(id: $id)\n  }\",\n  \"variables\": {\n    \"id\": \"your-boilerplate-id\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "graphql"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}

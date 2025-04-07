@@ -5,42 +5,60 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download, FileCode, GitFork, Star } from "lucide-react";
-import { fetchBoilerplateFiles, getBoilerplateById, BoilerplateFile } from "@/utils/boilerplateUtils";
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { useBoilerplateStore } from '@/store/boilerplate-store';
 
 interface CodeViewerProps {
   id: string;
 }
 
+interface BoilerplateFile {
+  id: string;
+  name: string;
+  content: string;
+  language: string;
+  path: string;
+}
+
 const CodeViewer = ({ id }: CodeViewerProps) => {
   const [activeFile, setActiveFile] = useState<string | null>(null);
-  const [files, setFiles] = useState<BoilerplateFile[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const boilerplate = id ? getBoilerplateById(id) : null;
+  const { currentBoilerplate, loading, error, fetchBoilerplateDetails } = useBoilerplateStore();
 
   useEffect(() => {
     if (id) {
-      setIsLoading(true);
-      fetchBoilerplateFiles(id)
-        .then((fetchedFiles) => {
-          setFiles(fetchedFiles);
-          if (fetchedFiles.length > 0) {
-            setActiveFile(fetchedFiles[0].id);
-          }
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching files:", error);
-          setIsLoading(false);
-        });
+      fetchBoilerplateDetails(id);
+      if (currentBoilerplate && currentBoilerplate?.files && currentBoilerplate?.files.length > 0) {
+        setActiveFile(currentBoilerplate?.files[0].id);
+      }
     }
-  }, [id]);
+  }, [id, fetchBoilerplateDetails]);
 
-  const activeFileData = files.find(file => file.id === activeFile);
+  if (loading) {
+    return (
+      <div className="container py-24">
+        <Card>
+          <CardContent className="pt-6">
+            <p>Loading...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
-  if (!boilerplate) {
+  if (error) {
+    return (
+      <div className="container py-24">
+        <Card>
+          <CardContent className="pt-6">
+            <p>Error: {error}</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!currentBoilerplate) {
     return (
       <div className="container py-24">
         <Card>
@@ -58,8 +76,8 @@ const CodeViewer = ({ id }: CodeViewerProps) => {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>{boilerplate?.title}</CardTitle>
-              <CardDescription>{boilerplate.description}</CardDescription>
+              <CardTitle>{currentBoilerplate?.name}</CardTitle>
+              <CardDescription>{currentBoilerplate?.description}</CardDescription>
             </div>
             <div className="flex items-center gap-4">
               <Button variant="outline" size="sm">
@@ -80,14 +98,14 @@ const CodeViewer = ({ id }: CodeViewerProps) => {
         <CardContent>
           <Tabs defaultValue={activeFile || undefined} onValueChange={setActiveFile}>
             <TabsList className="mb-4">
-              {files.map((file) => (
+              {/* {currentBoilerplate?.files.map((file) => (
                 <TabsTrigger key={file.id} value={file.id}>
                   <FileCode className="mr-2 h-4 w-4" />
                   {file.name}
                 </TabsTrigger>
-              ))}
+              ))} */}
             </TabsList>
-            {files.map((file) => (
+            {/* {currentBoilerplate?.files.map((file) => (
               <TabsContent key={file.id} value={file.id}>
                 <SyntaxHighlighter
                   language={file.language}
@@ -97,7 +115,7 @@ const CodeViewer = ({ id }: CodeViewerProps) => {
                   {file.content}
                 </SyntaxHighlighter>
               </TabsContent>
-            ))}
+            ))} */}
           </Tabs>
         </CardContent>
       </Card>
