@@ -42,15 +42,21 @@ export const useAuthStore = create<AuthState>()(persist(
         console.log('[Auth] Login attempt:', { email });
         set({ isLoading: true, error: null });
         const { login } = await graphqlClient(LOGIN, { email, password });
+        console.log('[Auth] Login response:', login);
+        if (!login) {
+            throw new Error('Login response is undefined');
+        }
         console.log('[Auth] Login response:', { success: !!login?.user });
+        // console.log("login?.user", login?.login?.user?.id)
         if (login?.user) {
-          console.log('[Auth] Login successful:', { user: login.user });
-          set({ user: login.user, isAuthenticated: true, isLoading: false });
+            console.log('[Auth] Login successful:', { user: login.user });
+            set({ user: login.user, isAuthenticated: true, isLoading: false });
         } else {
-          console.error('[Auth] Invalid login response');
-          throw new Error('Invalid login response');
+            console.error('[Auth] Invalid login response');
+            throw new Error('Invalid login response');
         }
       } catch (error) {
+        console.error('[Auth] Login error:', error);
         set({ error: error.message, isLoading: false, isAuthenticated: false });
         throw error;
       }

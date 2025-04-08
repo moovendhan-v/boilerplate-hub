@@ -8,8 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const protectedPaths = [
   '/dashboard',
   '/submit',
-  '/api/boilerplates',
-  '/api/graphql'
+  '/api/boilerplates'
 ];
 
 // Add paths that should be accessible only when NOT authenticated
@@ -33,6 +32,11 @@ export async function middleware(request: NextRequest) {
     isProtectedPath,
     isAuthPath
   });
+
+  // Allow all API requests to pass through - they'll be authenticated via Bearer token
+  if (path.startsWith('/api/')) {
+    return NextResponse.next();
+  }
 
   try {
     if (token) {

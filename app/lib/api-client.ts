@@ -19,10 +19,21 @@ apiClient.interceptors.request.use((config) => {
 
 export const graphqlClient = async (query: string, variables?: any) => {
   try {
-    const { data } = await apiClient.post('/graphql', {
+    const response = await apiClient.post('/graphql', {
       query,
       variables,
     });
+
+    // Check content type
+    const contentType = response.headers['content-type'];
+    if (!contentType || !contentType.includes('application/json')) {
+      console.error('Invalid content type received:', contentType);
+      console.error('Response data:', response.data);
+      throw new Error('Server returned invalid content type. Expected JSON but received: ' + contentType);
+    }
+
+    const { data } = response;
+    console.log('GraphQL Response:', { data, contentType });
 
     // Store token if it's a login response
     if (data?.data?.login?.token) {
