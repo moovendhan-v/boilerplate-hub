@@ -7,8 +7,10 @@ import { resolvers } from './modules';
 const baseSchema = readFileSync(join(process.cwd(), 'app/api/graphql/modules/base.graphql'), 'utf8');
 const userSchema = readFileSync(join(process.cwd(), 'app/api/graphql/modules/user/schema.graphql'), 'utf8');
 const boilerplateSchema = readFileSync(join(process.cwd(), 'app/api/graphql/modules/boilerplate/schema.graphql'), 'utf8');
+const fileSchema = readFileSync(join(process.cwd(), 'app/api/graphql/modules/file/schema.graphql'), 'utf8');
 
-const typeDefs = [baseSchema, userSchema, boilerplateSchema].join('\n');
+
+const typeDefs = [baseSchema, userSchema, boilerplateSchema, fileSchema].join('\n');
 
 const schema = makeExecutableSchema({
   typeDefs,

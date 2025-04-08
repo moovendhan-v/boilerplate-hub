@@ -75,8 +75,11 @@ To set up the database:
 3. Run Prisma migrations:
    ```sh
    npx prisma generate
+   npx --yes prisma generate
    npx prisma db push
    ```
+
+npm run dev --trace-warnings
 
 ## How can I deploy this project?
 

@@ -1,10 +1,13 @@
 export const LOGIN = `
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
-      id
-      name
-      email
-      avatar
+      user {
+        id
+        name
+        email
+        avatar
+      }
+      token
     }
   }
 `;

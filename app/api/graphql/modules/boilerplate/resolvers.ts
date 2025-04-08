@@ -6,14 +6,34 @@ export const boilerplateResolvers = {
   Query: {
     boilerplates: async () => {
       return await prisma.boilerplate.findMany({
-        include: { author: true },
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              avatar: true,
+              createdAt: true,
+              updatedAt: true
+            }
+          }
+        },
       });
     },
     boilerplate: async (_, { id }) => {
       return await prisma.boilerplate.findUnique({
         where: { id },
-        include: { 
-          author: true,
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              avatar: true,
+              createdAt: true,
+              updatedAt: true
+            }
+          }
         },
       });
     },
@@ -29,14 +49,36 @@ export const boilerplateResolvers = {
           language,
           authorId,
         },
-        include: { author: true },
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              avatar: true,
+              createdAt: true,
+              updatedAt: true
+            }
+          }
+        },
       });
     },
     updateBoilerplate: async (_, { id, ...data }) => {
       return await prisma.boilerplate.update({
         where: { id },
         data,
-        include: { author: true },
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              avatar: true,
+              createdAt: true,
+              updatedAt: true
+            }
+          }
+        },
       });
     },
     deleteBoilerplate: async (_, { id }) => {

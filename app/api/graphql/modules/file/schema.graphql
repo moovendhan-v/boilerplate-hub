@@ -1,0 +1,25 @@
+type CodeFile {
+  id: ID!
+  projectName: String!
+  fileName: String!
+  fileType: String!
+  content: String!
+  userId: ID!
+  createdAt: String!
+  updatedAt: String!
+}
+
+extend type Query {
+  getCodeFile(id: ID!): CodeFile
+  getCodeFiles(userId: ID!): [CodeFile!]!
+}
+
+extend type Mutation {
+  uploadCodeFile(
+    projectName: String!
+    fileName: String!
+    fileType: String!
+    content: String!
+    userId: ID!
+  ): CodeFile!
+}

@@ -5,6 +5,16 @@ const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true
+});
+
+// Add request interceptor to include auth token
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('auth_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 export const graphqlClient = async (query: string, variables?: any) => {
@@ -14,13 +24,30 @@ export const graphqlClient = async (query: string, variables?: any) => {
       variables,
     });
 
+    // Store token if it's a login response
+    if (data?.data?.login?.token) {
+      localStorage.setItem('auth_token', data.data.login.token);
+    }
+
     if (data.errors) {
-      throw new Error(data.errors[0].message);
+      const errorMessage = data.errors[0].message || 'GraphQL Error';
+      const errorDetails = data.errors[0].extensions?.code || '';
+      throw new Error(`${errorMessage}${errorDetails ? ` (${errorDetails})` : ''}`);
     }
 
     return data.data;
   } catch (error) {
-    throw error;
+    if (error.response) {
+      // Server responded with a status code outside the 2xx range
+      const message = error.response.data?.message || 'Server error';
+      throw new Error(`API Error: ${message}`);
+    } else if (error.request) {
+      // Request was made but no response received
+      throw new Error('Network error: No response from server');
+    } else {
+      // Error in request setup
+      throw new Error(error.message || 'Unexpected error');
+    }
   }
 };
 

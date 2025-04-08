@@ -38,8 +38,24 @@ model File {
 model User {
   id          String       @id @default(auto()) @map("_id") @db.ObjectId
   email       String       @unique
+  password    String
   name        String?
+  avatar      String?
+  role        String       @default("user")
   boilerplates Boilerplate[]
+  codeFiles   CodeFile[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+}
+
+model CodeFile {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectName String
+  fileName    String
+  fileType    String
+  content     String
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

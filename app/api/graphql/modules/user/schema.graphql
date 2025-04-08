@@ -8,7 +8,26 @@ type User {
   updatedAt: String!
 }
 
+type LoginResponse {
+  user: User!
+  token: String!
+}
+
+input UserInput {
+  email: String!
+  password: String!
+  name: String
+  avatar: String
+}
+
 extend type Query {
   users: [User!]!
   user(id: ID!): User
+  me: User
+}
+
+extend type Mutation {
+  register(data: UserInput!): User!
+  login(email: String!, password: String!): LoginResponse!
+  updateProfile(data: UserInput!): User!
 }

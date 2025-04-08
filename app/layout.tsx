@@ -1,20 +1,12 @@
-import { Inter } from 'next/font/google';
-import { Metadata } from 'next';
-import { Navigation } from './components/Navigation';
+'use client';
+
 import './globals.css';
+import { Inter } from 'next/font/google';
+import Navigation from '@/components/Navigation';
+import { Toaster } from '@/components/ui/toaster';
+import { ThemeProvider } from 'next-themes';
 
 const inter = Inter({ subsets: ['latin'] });
-
-export const metadata: Metadata = {
-  title: {
-    template: '%s | Boilerplate Hub',
-    default: 'Boilerplate Hub'
-  },
-  description: 'Discover, share, and use boilerplate code for your next project',
-  icons: {
-    icon: '/favicon.ico'
-  }
-};
 
 export default function RootLayout({
   children,
@@ -22,12 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} antialiased`}>
-        <Navigation />
-        <main className="container mx-auto px-4 py-8">
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <Navigation />
           {children}
-        </main>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
