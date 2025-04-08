@@ -70,7 +70,8 @@ export const useBoilerplateStore = create<BoilerplateStore>((set) => ({
   createBoilerplate: async (boilerplateData) => {
     set({ loading: true, error: null })
     try {
-      const data = await graphqlClient(CREATE_BOILERPLATE, { data: boilerplateData })
+      const data = await graphqlClient(CREATE_BOILERPLATE, { data: boilerplateData });
+      console.log("CREATE_BOILERPLATE", data);
       set(state => ({
         boilerplates: [...state.boilerplates, data.createBoilerplate],
         loading: false

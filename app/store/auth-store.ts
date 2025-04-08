@@ -28,7 +28,7 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>()(persist(
-  (set) => ({
+  (set, get) => ({
     user: null,
     isAuthenticated: false,
     isLoading: false,
@@ -51,6 +51,9 @@ export const useAuthStore = create<AuthState>()(persist(
         if (login?.user) {
             console.log('[Auth] Login successful:', { user: login.user });
             set({ user: login.user, isAuthenticated: true, isLoading: false });
+            // Log the updated value of isAuthenticated
+            const { isAuthenticated } = get();  // Access the current state
+            console.log('[Auth] isAuthenticated after login:', isAuthenticated);
         } else {
             console.error('[Auth] Invalid login response');
             throw new Error('Invalid login response');

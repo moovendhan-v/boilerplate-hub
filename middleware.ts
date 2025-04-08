@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 // Add paths that require authentication
 const protectedPaths = [
   '/dashboard',
-  '/submit',
+  // '/submit',
   '/api/boilerplates'
 ];
 

@@ -11,6 +11,7 @@ const apiClient = axios.create({
 // Add request interceptor to include auth token
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('auth_token');
+  console.log("token available", token)
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -33,7 +34,7 @@ export const graphqlClient = async (query: string, variables?: any) => {
     }
 
     const { data } = response;
-    console.log('GraphQL Response:', { data, contentType });
+    console.log('GraphQL Response:', { query, variables, data, contentType });
 
     // Store token if it's a login response
     if (data?.data?.login?.token) {
