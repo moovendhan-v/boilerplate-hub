@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { graphqlClient } from '@/lib/api-client';
 import { LOGIN, REGISTER } from '@/lib/user-queries';
+import { useRouter } from 'next/navigation';
 
 type UserRole = 'user' | 'admin';
 
@@ -19,11 +20,10 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   returnUrl: string | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, router: any) => Promise<void>;
   signup: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
   clearError: () => void;
-  checkAuth: () => Promise<void>;
   setReturnUrl: (url: string | null) => void;
 }
 
@@ -37,7 +37,7 @@ export const useAuthStore = create<AuthState>()(persist(
 
     setReturnUrl: (url: string | null) => set({ returnUrl: url }),
 
-    login: async (email: string, password: string) => {
+    login: async (email: string, password: string, router: any) => {
       try {
         console.log('[Auth] Login attempt:', { email });
         set({ isLoading: true, error: null });
@@ -47,13 +47,19 @@ export const useAuthStore = create<AuthState>()(persist(
             throw new Error('Login response is undefined');
         }
         console.log('[Auth] Login response:', { success: !!login?.user });
-        // console.log("login?.user", login?.login?.user?.id)
         if (login?.user) {
             console.log('[Auth] Login successful:', { user: login.user });
+            // Token is now handled by HTTP-only cookie set by the server
+            // No need to store token in localStorage
             set({ user: login.user, isAuthenticated: true, isLoading: false });
-            // Log the updated value of isAuthenticated
-            const { isAuthenticated } = get();  // Access the current state
-            console.log('[Auth] isAuthenticated after login:', isAuthenticated);
+            const { returnUrl } = get();
+            console.log('[Auth] Return URL:', returnUrl);
+            if (returnUrl) {
+                router.push(returnUrl);
+                set({ returnUrl: null });
+            } else {
+                router.push('/explore');
+            }
         } else {
             console.error('[Auth] Invalid login response');
             throw new Error('Invalid login response');
@@ -106,41 +112,7 @@ export const useAuthStore = create<AuthState>()(persist(
       set({ error: null });
     },
 
-    checkAuth: async () => {
-      try {
-        const token = localStorage.getItem('auth_token');
-        if (!token) {
-          console.log('[Auth] No token found');
-          set({ user: null, isAuthenticated: false, error: null });
-          return;
-        }
-    
-        console.log('[Auth] Checking authentication status');
-        const data = await graphqlClient(`
-          query CheckAuth {
-            me {
-              id
-              name
-              email
-              avatar
-            }
-          }
-        `);
-    
-        if (data?.me) {
-          console.log('[Auth] Authentication successful:', { user: data.me });
-          set({ user: data.me, isAuthenticated: true, error: null, isLoading: false });
-        } else {
-          console.log('[Auth] No user data received');
-          localStorage.removeItem('auth_token');
-          set({ user: null, isAuthenticated: false, error: 'Session expired', isLoading: false });
-        }
-      } catch (error) {
-        const errorMessage = error.message || 'Unexpected authentication error';
-        console.error('[Auth] Authentication check failed:', { error: errorMessage });
-        set({ user: null, isAuthenticated: false, error: errorMessage });
-      }
-    },
+
   }),
   {
     name: 'auth-storage',
@@ -175,19 +147,18 @@ export const useAuthStore = create<AuthState>()(persist(
     },
     skipHydration: false,
     partialize: (state) => {
-      const { user, isAuthenticated, returnUrl, isLoading, error, login, signup, logout, clearError, checkAuth } = state;
+      const { user, isAuthenticated, returnUrl, isLoading, error } = state;
       return {
         user,
         isAuthenticated,
         returnUrl,
         isLoading,
         error,
-        // You can return other properties as well, like login, signup, etc., if needed
-        login: undefined,  // You can return undefined or omit any function that does not need to persist
+        // Functions don't need to be persisted
+        login: undefined,
         signup: undefined,
         logout: undefined,
-        clearError: undefined,
-        checkAuth: undefined
+        clearError: undefined
       };
     }
   })

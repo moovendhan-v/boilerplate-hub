@@ -110,24 +110,18 @@ export default function SubmitBoilerplate() {
 
   // Handle authentication check and redirect
   useEffect(() => {
-    // const checkAuth = async () => {
-    //   console.log('[SubmitBoilerplate] Checking authentication status...');
-    //   await useAuthStore.getState().checkAuth();
-    //   const currentState = useAuthStore.getState();
-    //   console.log('[SubmitBoilerplate] Auth state:', {
-    //     isAuthenticated: currentState.isAuthenticated,
-    //     user: currentState.user,
-    //     loading: currentState.isLoading
-    //   });
+    const checkAuth = () => {
+      console.log('[SubmitBoilerplate] Checking authentication status...');
+      const currentState = useAuthStore.getState();
 
-    //   if (!currentState.isAuthenticated) {
-    //     console.log('[SubmitBoilerplate] User not authenticated, redirecting to login...');
-    //     useAuthStore.getState().setReturnUrl('/submit');
-    //     router.push('/login');
-    //   }
-    // };
+      if (!currentState.isAuthenticated) {
+        console.log('[SubmitBoilerplate] User not authenticated, redirecting to login...');
+        useAuthStore.getState().setReturnUrl('/submit');
+        router.push('/login');
+      }
+    };
 
-    // checkAuth();
+    checkAuth();
   }, [router]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

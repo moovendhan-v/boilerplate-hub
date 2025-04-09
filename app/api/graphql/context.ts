@@ -9,7 +9,7 @@ interface AuthTokenPayload {
 }
 
 export async function createContext({ req }) {
-  let user = null;
+  let user: any = null;
 
   try {
     // Get the token from the auth_token cookie

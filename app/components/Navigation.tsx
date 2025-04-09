@@ -28,20 +28,20 @@ export default function Navigation() {
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
                 href="/explore"
-                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
+                className="inline-flex items-center px-1 pt-1 text-sm font-medium"
               >
                 Explore
               </Link>
               <Link
                 href="/community"
-                className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
+                className="inline-flex items-center px-1 pt-1 text-sm font-medium"
               >
                 Community
               </Link>
               {user?.role === 'admin' && (
                 <Link
                   href="/admin"
-                  className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900"
+                  className="inline-flex items-center px-1 pt-1 text-sm font-medium"
                 >
                   Admin
                 </Link>

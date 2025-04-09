@@ -26,10 +26,8 @@ export default function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(formData.email, formData.password);
-      const returnUrl = useAuthStore.getState().returnUrl;
-      useAuthStore.getState().setReturnUrl(null);
-      router.push(returnUrl || '/dashboard');
+      await login(formData.email, formData.password, router);
+      // Navigation is now handled in the auth store
     } catch (err) {
       // Error is handled by the store
     }
