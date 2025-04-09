@@ -14,6 +14,7 @@ const protectedPaths = [
 // Add paths that should be accessible only when NOT authenticated
 const authPaths = ['/login', '/signup'];
 
+
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   // Check for Bearer token in Authorization header first

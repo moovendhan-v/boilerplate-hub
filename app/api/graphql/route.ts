@@ -11,7 +11,8 @@ const userSchema = readFileSync(join(process.cwd(), 'app/api/graphql/modules/use
 const boilerplateSchema = readFileSync(join(process.cwd(), 'app/api/graphql/modules/boilerplate/schema.graphql'), 'utf8');
 const fileSchema = readFileSync(join(process.cwd(), 'app/api/graphql/modules/file/schema.graphql'), 'utf8');
 
-const typeDefs = [baseSchema, userSchema, boilerplateSchema, fileSchema].join('\n');
+// Merge schemas with proper spacing to ensure type definitions are separated
+const typeDefs = [baseSchema, '\n', userSchema, '\n', boilerplateSchema, '\n', fileSchema].join('');
 
 const schema = makeExecutableSchema({
   typeDefs,

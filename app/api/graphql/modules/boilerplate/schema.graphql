@@ -25,15 +25,17 @@ extend type Query {
   boilerplate(id: ID!): Boilerplate
 }
 
+input CreateBoilerplateInput {
+  name: String!
+  description: String!
+  tags: [String!]!
+  framework: String!
+  language: String!
+  authorId: ID!
+}
+
 extend type Mutation {
-  createBoilerplate(
-    name: String!
-    description: String!
-    tags: [String!]!
-    framework: String!
-    language: String!
-    authorId: ID!
-  ): Boilerplate!
+  createBoilerplate(data: CreateBoilerplateInput!): Boilerplate!
   updateBoilerplate(
     id: ID!
     name: String

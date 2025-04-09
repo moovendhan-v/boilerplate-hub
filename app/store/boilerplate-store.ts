@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { graphqlClient } from '@/lib/api-client'
-import { GET_BOILERPLATE_DETAILS, GET_BOILERPLATES, CREATE_BOILERPLATE, UPDATE_BOILERPLATE, DELETE_BOILERPLATE } from '@/lib/graphql-queries'
+import { GET_BOILERPLATES, GET_BOILERPLATE_DETAILS, CREATE_BOILERPLATE, UPDATE_BOILERPLATE, DELETE_BOILERPLATE } from '@/lib/graphql-queries'
 
 interface Boilerplate {
   id: string
@@ -76,8 +76,11 @@ export const useBoilerplateStore = create<BoilerplateStore>((set) => ({
         boilerplates: [...state.boilerplates, data.createBoilerplate],
         loading: false
       }))
+      return data.createBoilerplate;
     } catch (error) {
+      console.log("CREATE_BOILERPLATE", error);
       set({ error: error.message, loading: false })
+      throw error;
     }
   },
   updateBoilerplate: async (id, boilerplateData) => {

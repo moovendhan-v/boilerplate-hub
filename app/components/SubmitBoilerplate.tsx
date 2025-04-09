@@ -159,7 +159,7 @@ export default function SubmitBoilerplate() {
         }
       });
 
-      await createBoilerplate({
+      const createBoilerplateResp = await createBoilerplate({
         ...formData,
         author: {
           id: user.id,
@@ -167,6 +167,8 @@ export default function SubmitBoilerplate() {
           avatar: user.avatar || ''
         }
       });
+
+      console.log('[SubmitBoilerplate] Create boilerplate response:', createBoilerplateResp);
 
       console.log('[SubmitBoilerplate] Boilerplate created successfully');
 
